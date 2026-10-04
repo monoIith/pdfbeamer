@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64"><Configuration>Debug</Configuration><Platform>x64</Platform></ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64"><Configuration>Release</Configuration><Platform>x64</Platform></ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A3E17FA9-7CB8-45B8-8D9C-4EC787811E21}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>PdfEditor.Core</RootNamespace>
+    <ProjectName>PdfEditor.Core</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup>
+    <OutDir>$(BaseOutputPath)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(BaseIntermediateOutputPath)$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>PdfEditor.Core</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(SolutionDir)third_party\mupdf\src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>FZ_DLL;NOMINMAX;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TreatWarningAsError>false</TreatWarningAsError>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="include\PdfEditor\Core\DocumentSession.h" />
+    <ClInclude Include="include\PdfEditor\Core\Geometry.h" />
+    <ClInclude Include="include\PdfEditor\Core\Models.h" />
+    <ClInclude Include="include\PdfEditor\Core\MuPdfBackend.h" />
+    <ClInclude Include="include\PdfEditor\Core\PdfBackend.h" />
+    <ClInclude Include="include\PdfEditor\Core\PdfWorker.h" />
+    <ClInclude Include="include\PdfEditor\Core\TextMarkup.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\DocumentSession.cpp" />
+    <ClCompile Include="src\Geometry.cpp" />
+    <ClCompile Include="src\MuPdfBackend.cpp" />
+    <ClCompile Include="src\PdfBackend.cpp" />
+    <ClCompile Include="src\PdfWorker.cpp" />
+    <ClCompile Include="src\TextMarkup.cpp" />
+  </ItemGroup>
+  <Target Name="VerifyMuPdfHeaders" BeforeTargets="ClCompile">
+    <Error Condition="!Exists('$(SolutionDir)third_party\mupdf\src\include\mupdf\fitz.h')"
+           Text="MuPDF 1.28.5 is not bootstrapped. Run scripts\bootstrap-mupdf.ps1 from a Developer PowerShell." />
+  </Target>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

@@ -1,0 +1,19 @@
+.vs/
+out/
+build/
+packages/
+Generated Files/
+*.VC.db
+*.VC.VC.opendb
+*.user
+*.suo
+*.aps
+*.appx
+*.appxbundle
+*.msix
+*.msixbundle
+*.cer
+*.pfx
+third_party/mupdf/src/
+third_party/mupdf/build/
+

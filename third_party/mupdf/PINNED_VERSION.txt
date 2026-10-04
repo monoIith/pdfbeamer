@@ -1,0 +1,12 @@
+MuPDF release: 1.28.5
+Git tag: 1.28.5
+Git commit: 8ad45e92f0935d3d87f1db3f873086472a5e1b24
+Source: https://github.com/ArtifexSoftware/mupdf
+
+The bootstrap script verifies this exact commit before building. It compiles
+the PDF handler and Story/HTML layout engine while disabling JavaScript, OCR
+output, barcode support, and non-PDF document handlers through compiler flags.
+
+MuPDF is AGPL-3.0-or-later or commercially licensed. The prototype is intended
+for personal AGPL-compatible use. Obtain a commercial Artifex license or replace
+the backend before closed-source distribution.

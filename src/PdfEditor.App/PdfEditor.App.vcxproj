@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64"><Configuration>Debug</Configuration><Platform>x64</Platform></ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64"><Configuration>Release</Configuration><Platform>x64</Platform></ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D342D3A1-ECF4-4F9E-838C-2D78E6A76672}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>PdfEditor.App</RootNamespace>
+    <ProjectName>PdfEditor.App</ProjectName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <AppContainerApplication>false</AppContainerApplication>
+    <ApplicationType>Windows Store</ApplicationType>
+    <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
+    <CppWinRTOptimized>true</CppWinRTOptimized>
+    <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
+    <AppxPackage>true</AppxPackage>
+    <EnableMsixTooling>true</EnableMsixTooling>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup>
+    <OutDir>$(BaseOutputPath)$(Platform)\$(Configuration)\PdfEditor.App\</OutDir>
+    <IntDir>$(BaseIntermediateOutputPath)$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>PdfEditor.App</TargetName>
+    <GenerateAppInstallerFile>false</GenerateAppInstallerFile>
+    <AppxPackageSigningEnabled>false</AppxPackageSigningEnabled>
+    <AppxAutoIncrementPackageRevision>false</AppxAutoIncrementPackageRevision>
+    <AppxSymbolPackageEnabled>false</AppxSymbolPackageEnabled>
+    <GenerateTestArtifacts>true</GenerateTestArtifacts>
+    <AppxBundle>Never</AppxBundle>
+    <AppxBundlePlatforms>x64</AppxBundlePlatforms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\PdfEditor.Core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NOMINMAX;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)third_party\mupdf\build\x64\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>mupdfcpp64.lib;windowsapp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml" />
+    <Page Include="MainWindow.xaml" />
+    <AppxManifest Include="Package.appxmanifest"><SubType>Designer</SubType></AppxManifest>
+    <None Include="app.manifest" />
+    <Midl Include="Project.idl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.xaml.h" />
+    <ClInclude Include="MainWindow.xaml.h" />
+    <ClInclude Include="pch.h" />
+    <ClCompile Include="App.xaml.cpp" />
+    <ClCompile Include="MainWindow.xaml.cpp" />
+    <ClCompile Include="pch.cpp"><PrecompiledHeader>Create</PrecompiledHeader></ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Fonts\*.ttf"><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory></Content>
+    <Content Include="Assets\Fonts\*.txt"><CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory></Content>
+    <Content Include="Assets\Square44x44Logo.png" />
+    <Content Include="Assets\Square150x150Logo.png" />
+    <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\SplashScreen.png" />
+    <None Include="Assets\AppIcon.svg" />
+    <Content Include="..\..\THIRD_PARTY_NOTICES.md"><Link>THIRD_PARTY_NOTICES.md</Link></Content>
+    <Content Include="..\..\third_party\mupdf\COPYING"><Link>Licenses\MuPDF-AGPL-3.0.txt</Link></Content>
+    <Content Include="..\..\third_party\mupdf\build\x64\$(Configuration)\mupdfcpp64.dll">
+      <Link>mupdfcpp64.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PdfEditor.Core\PdfEditor.Core.vcxproj">
+      <Project>{A3E17FA9-7CB8-45B8-8D9C-4EC787811E21}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.5.1" />
+    <PackageReference Include="Microsoft.Windows.CppWinRT" Version="3.0.260818.1" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2705" />
+  </ItemGroup>
+  <Target Name="VerifyMuPdfRuntime" BeforeTargets="Link">
+    <Error Condition="!Exists('$(SolutionDir)third_party\mupdf\build\x64\$(Configuration)\mupdfcpp64.lib')"
+           Text="MuPDF 1.28.5 is not built for $(Configuration). Run scripts\bootstrap-mupdf.ps1 -Configuration $(Configuration)." />
+  </Target>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>
