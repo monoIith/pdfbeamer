@@ -8,4 +8,11 @@
     <BaseOutputPath>$(MSBuildThisFileDirectory)out\</BaseOutputPath>
     <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)out\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(PortableBuild)'=='true'">
+    <BaseOutputPath>$(MSBuildThisFileDirectory)out\portable\</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)out\obj\portable\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <HybridCrtConfiguration>$(Configuration)</HybridCrtConfiguration>
+  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)HybridCRT.props"
+          Condition="'$(PortableBuild)'=='true' and Exists('$(MSBuildThisFileDirectory)HybridCRT.props')" />
 </Project>

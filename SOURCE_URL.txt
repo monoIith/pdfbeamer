@@ -1,0 +1,14 @@
+PDF Textbox Editor 0.1.0 corresponding source
+================================================
+
+Application source and build scripts:
+https://github.com/monoIith/pdfbeamer/tree/v0.1.0
+
+MuPDF source used by this build:
+https://github.com/ArtifexSoftware/mupdf/tree/8ad45e92f0935d3d87f1db3f873086472a5e1b24
+
+MuPDF release: 1.28.5
+MuPDF commit: 8ad45e92f0935d3d87f1db3f873086472a5e1b24
+
+The repository includes the scripts and version pins required to reproduce the
+Windows 11 x64 build. Release the binary and matching v0.1.0 source tag together.

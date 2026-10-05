@@ -69,6 +69,41 @@ Configure a trusted package-signing certificate in the app project's Packaging
 properties before distributing or installing a Release MSIX outside Developer
 Mode. The checked-in manifest publisher is `CN=PdfEditor Development`.
 
+## Portable Windows build
+
+For a friend-friendly Windows 11 x64 build that does not require installation,
+Developer Mode, the Windows App Runtime, or a separately installed Visual C++
+Redistributable, run this from a **Developer PowerShell for Visual Studio**:
+
+```powershell
+.\scripts\build-portable.ps1
+```
+
+The script builds and tests Release x64, builds the app as unpackaged and
+self-contained, stages the application and all runtime files, launches it from
+a temporary path containing spaces, and creates:
+
+```text
+dist\PDF-Textbox-Editor-0.1.0-win-x64-portable.zip
+dist\PDF-Textbox-Editor-0.1.0-win-x64-portable.zip.sha256
+```
+
+The recipient must extract the whole ZIP and keep its files together before
+double-clicking `PdfEditor.App.exe`. The executable is unsigned, so Windows
+SmartScreen may show a warning. Removing that warning requires a trusted
+code-signing certificate.
+
+For the final AGPL release, commit all changes, create tag `v0.1.0`, and run:
+
+```powershell
+.\scripts\build-portable.ps1 -CreateSourceArchive
+```
+
+Publish the portable ZIP, checksum, and generated source ZIP together. Use
+`-SkipLaunchTest` only in a non-interactive build environment; a release sent
+to another person must pass the normal launch test and a launch on a clean
+Windows 11 x64 machine.
+
 ## Use
 
 1. Choose **Open** and select an ordinary, unencrypted `.pdf`.
@@ -112,7 +147,8 @@ ctest --test-dir build --output-on-failure
 ## Licensing
 
 MuPDF is AGPL-3.0-or-later/commercial dual-licensed. This prototype is suitable
-for personal AGPL-compatible use. A closed-source distributed product must
-obtain an Artifex commercial license or replace the backend. See
-`THIRD_PARTY_NOTICES.md` and `third_party/mupdf/COPYING`. Bundled Noto fonts are
-under the SIL Open Font License 1.1.
+for AGPL-compatible use and the application is released under
+AGPL-3.0-or-later. A closed-source distributed product must obtain an Artifex
+commercial license or replace the backend. See `LICENSE`,
+`THIRD_PARTY_NOTICES.md`, and `third_party/mupdf/COPYING`. Bundled Noto fonts
+are under the SIL Open Font License 1.1.

@@ -28,6 +28,8 @@
                                 Click="OnToggleThumbnails" IsChecked="True" />
             <AppBarToggleButton x:Name="SelectToolButton" Icon="TouchPointer" Label="Select" Click="OnSelectTool" IsChecked="True" />
             <AppBarToggleButton x:Name="TextToolButton" Icon="Font" Label="Text" Click="OnTextTool" />
+            <AppBarSeparator />
+            <AppBarButton Icon="Help" Label="About" Click="OnAbout" />
             <CommandBar.Content>
                 <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
                     <TextBlock Text="Zoom" VerticalAlignment="Center" />

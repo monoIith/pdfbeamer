@@ -14,10 +14,10 @@
 #include <exception>
 #include <filesystem>
 #include <limits>
+#include <stdexcept>
 #include <vector>
 
 using namespace winrt;
-using namespace Windows::ApplicationModel;
 using namespace Windows::Foundation;
 using namespace Windows::Storage::Pickers;
 using namespace Windows::System;
@@ -78,6 +78,54 @@ namespace
         return result;
     }
 
+    std::filesystem::path ExecutableDirectory()
+    {
+        std::vector<wchar_t> buffer(512, L'\0');
+        for (;;)
+        {
+            ::SetLastError(ERROR_SUCCESS);
+            const auto length = ::GetModuleFileNameW(nullptr, buffer.data(), static_cast<DWORD>(buffer.size()));
+            if (length == 0)
+            {
+                throw std::runtime_error("Windows could not determine the application directory.");
+            }
+            if (length < buffer.size() && buffer[length] == L'\0')
+            {
+                return std::filesystem::path(std::wstring(buffer.data(), length)).parent_path();
+            }
+            if (buffer.size() >= 32768)
+            {
+                throw std::runtime_error("The application path is too long.");
+            }
+            buffer.resize(std::min<std::size_t>(buffer.size() * 2, 32768), L'\0');
+        }
+    }
+
+#if defined(PDFEDITOR_PORTABLE)
+    std::wstring FileUri(std::filesystem::path const& path)
+    {
+        const auto generic = std::filesystem::absolute(path).lexically_normal().generic_wstring();
+        std::wstring escaped;
+        escaped.reserve(generic.size() + 16);
+        for (const wchar_t character : generic)
+        {
+            switch (character)
+            {
+            case L'%': escaped += L"%25"; break;
+            case L' ': escaped += L"%20"; break;
+            case L'#': escaped += L"%23"; break;
+            case L'?': escaped += L"%3F"; break;
+            default: escaped.push_back(character); break;
+            }
+        }
+        if (escaped.rfind(L"//", 0) == 0)
+        {
+            return L"file:" + escaped;
+        }
+        return L"file:///" + escaped;
+    }
+#endif
+
     hstring ToHString(std::u16string const& value)
     {
         std::wstring result;
@@ -118,7 +166,12 @@ namespace
         else if (box.textStyle.bold) fileFamily += L"-Bold";
         else if (box.textStyle.italic) fileFamily += L"-Italic";
         else fileFamily += L"-Regular";
+#if defined(PDFEDITOR_PORTABLE)
+        const auto fontPath = ExecutableDirectory() / L"Assets" / L"Fonts" / (fileFamily + L".ttf");
+        return hstring(FileUri(fontPath) + L"#" + displayFamily);
+#else
         return hstring(L"ms-appx:///Assets/Fonts/" + fileFamily + L".ttf#" + displayFamily);
+#endif
     }
 
     core::Color SelectedColor(ComboBox const& combo, core::Color fallback)
@@ -213,10 +266,23 @@ namespace winrt::PdfEditor::App::implementation
 
     void MainWindow::InitializeBackend()
     {
-        auto installed = Package::Current().InstalledLocation().Path();
-        const auto fontDirectory = std::filesystem::path(installed.c_str()) / L"Assets" / L"Fonts";
+        const auto fontDirectory = ExecutableDirectory() / L"Assets" / L"Fonts";
+        if (!std::filesystem::is_directory(fontDirectory))
+        {
+            throw std::runtime_error("The bundled font directory is missing. Extract the complete application folder before running it.");
+        }
         backend_ = std::make_shared<core::MuPdfBackend>(fontDirectory);
         worker_ = std::make_unique<core::PdfWorker>();
+    }
+
+    fire_and_forget MainWindow::OnAbout(IInspectable const&, RoutedEventArgs const&)
+    {
+        auto lifetime = get_strong();
+        co_await ShowMessageAsync(
+            L"PDF Textbox Editor 0.1.0",
+            L"This program is free software licensed under the GNU Affero General Public License, version 3 or later, and is provided without warranty.\n\n"
+            L"Source code: https://github.com/monoIith/pdfbeamer\n\n"
+            L"PDF support is provided by MuPDF 1.28.5. Bundled Noto fonts are licensed under the SIL Open Font License 1.1.");
     }
 
     void MainWindow::InitializeColorPickers()

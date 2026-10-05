@@ -1,0 +1,24 @@
+PDF TEXTBOX EDITOR 0.1.0
+========================
+
+System requirement: Windows 11 on an x64 PC.
+
+1. Extract the entire ZIP file to a normal folder.
+2. Keep every extracted file and the Assets folder together.
+3. Double-click PdfEditor.App.exe.
+
+This development build is not digitally signed. Windows SmartScreen may show a
+warning the first time it runs. If you trust the ZIP supplied by the developer,
+choose More info, then Run anyway. A trusted code-signing certificate is needed
+to remove that warning.
+
+Do not run PdfEditor.App.exe from inside the ZIP preview. If the app reports that
+its font directory or a DLL is missing, extract the complete ZIP again.
+
+This program is free software under the GNU Affero General Public License,
+version 3 or later, and is provided without warranty. Source code and build
+instructions are available at:
+
+https://github.com/monoIith/pdfbeamer
+
+See LICENSE and THIRD_PARTY_NOTICES.md for details.

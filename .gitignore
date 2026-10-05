@@ -1,5 +1,6 @@
 .vs/
 out/
+dist/
 build/
 packages/
 Generated Files/
@@ -16,4 +17,3 @@ Generated Files/
 *.pfx
 third_party/mupdf/src/
 third_party/mupdf/build/
-

@@ -15,7 +15,11 @@
     <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
     <CppWinRTOptimized>true</CppWinRTOptimized>
     <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
-    <AppxPackage>true</AppxPackage>
+    <AppxPackage Condition="'$(PortableBuild)'!='true'">true</AppxPackage>
+    <AppxPackage Condition="'$(PortableBuild)'=='true'">false</AppxPackage>
+    <WindowsPackageType Condition="'$(PortableBuild)'=='true'">None</WindowsPackageType>
+    <WindowsAppSDKSelfContained Condition="'$(PortableBuild)'=='true'">true</WindowsAppSDKSelfContained>
+    <WindowsAppSdkUndockedRegFreeWinRTInitialize Condition="'$(PortableBuild)'=='true'">true</WindowsAppSdkUndockedRegFreeWinRTInitialize>
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -61,10 +65,15 @@
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(PortableBuild)'=='true'">
+    <ClCompile>
+      <PreprocessorDefinitions>PDFEDITOR_PORTABLE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
     <Page Include="MainWindow.xaml" />
-    <AppxManifest Include="Package.appxmanifest"><SubType>Designer</SubType></AppxManifest>
+    <AppxManifest Include="Package.appxmanifest" Condition="'$(PortableBuild)'!='true'"><SubType>Designer</SubType></AppxManifest>
     <None Include="app.manifest" />
     <Midl Include="Project.idl" />
   </ItemGroup>

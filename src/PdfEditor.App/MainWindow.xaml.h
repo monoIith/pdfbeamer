@@ -36,6 +36,7 @@ namespace winrt::PdfEditor::App::implementation
         void OnDocumentViewChanged(Windows::Foundation::IInspectable const&, Microsoft::UI::Xaml::Controls::ScrollViewerViewChangedEventArgs const&);
         winrt::fire_and_forget OnDocumentPointerWheelChanged(Windows::Foundation::IInspectable const&, Microsoft::UI::Xaml::Input::PointerRoutedEventArgs const&);
         winrt::fire_and_forget OnKeyDown(Windows::Foundation::IInspectable const&, Microsoft::UI::Xaml::Input::KeyRoutedEventArgs const&);
+        winrt::fire_and_forget OnAbout(Windows::Foundation::IInspectable const&, Microsoft::UI::Xaml::RoutedEventArgs const&);
 
     private:
         struct PageView
